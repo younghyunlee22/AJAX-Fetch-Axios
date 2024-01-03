@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Axios</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <label>
+      Input:
+      <input type="text" id="myInput" />
+    </label>
+
+    <button id="myBtn" type="button">Test it Out</button>
+
+    <script>
+      axios.interceptors.request.use((request) => {
+        console.log("Request sent...");
+        return request;
+      });
+
+      axios.interceptors.response.use(
+        (response) => {
+          // Success: status 200 - 299
+          console.log("Successful response!");
+          return response;
+        },
+        (error) => {
+          // Failure: anything outside of status 2XX
+          console.log("Unsuccessful response...");
+          throw error;
+        }
+      );
+
+      document.getElementById("myBtn").addEventListener("click", testRequest);
+
+      async function testRequest() {
+        let inputVal = document.getElementById("myInput").value;
+        let requestBody = { data: inputVal };
+
+        const response = await axios.post(
+          "https://jsonplaceholder.typicode.com/todos",
+          requestBody,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=UTF-8",
+            },
+            timeout: 10000,
+          }
+        );
+
+        logResponse(response);
+      }
+
+      async function logResponse(response) {
+        console.log(response);
+      }
+    </script>
+  </body>
+</html>
